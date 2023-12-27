@@ -20,6 +20,7 @@ let initWebRoutes = (app) => {
     router.put("/api/edit-user", userController.handleEditUser);
     router.delete("/api/delete-user", userController.handleDeleteUser);
     router.post("/api/uploadUsers", upload.single("file"), userController.handleUploadUser);
+    router.get("/api/readFileTxt", userController.handleReadFileTxt)
 
     return app.use("/", router);
 }

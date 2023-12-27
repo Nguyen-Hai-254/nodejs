@@ -1,9 +1,9 @@
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize('nguyenhai', 'root', null, {
-    host: '127.0.0.1',
+    host: process.env.HOST,
     dialect: 'mysql',
-    port: 3307,
+    port: process.env.PORT_DB || 3307,
     logging: false
 });
 

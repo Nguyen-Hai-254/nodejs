@@ -1,4 +1,3 @@
-import { where } from "sequelize";
 import db from "../models/index";
 import bcrypt from "bcryptjs";
 
@@ -12,7 +11,6 @@ let handleUserLogin = (email, password) => {
             let userData = {};
 
             let user = await db.User.findOne({
-                attributes: ['email', 'roleId', 'password'],
                 where: { email: email },
                 raw: true
             })
@@ -115,7 +113,11 @@ const insertUser = (user) => {
 
                 userData.errCode = 0;
                 userData.message = 'Create new User successful!';
-                // userData.data = []
+                let resUserData = await db.User.findOne({
+                    where: { email: user.email },
+                    attributes: { exclude: ['password'] }
+                })
+                userData.data = resUserData
             }
 
             resolve(userData);
@@ -217,7 +219,7 @@ const uploadUser = (fileName, originalName) => {
     return new Promise(async (resolve, reject) => {
         try {
             let path = __dirname + "../../../resources/" + fileName;
-            
+
             readXlsxFile(path).then((rows) => {
                 rows.shift();
 
@@ -235,7 +237,7 @@ const uploadUser = (fileName, originalName) => {
 
                     await insertUser(user);
                 });
-                
+
                 resolve({
                     message: "Uploaded the file successfully: " + originalName
                 });
